@@ -61,6 +61,7 @@ public:
 	void DFS();
 	void BFS();
 	void vEB();
+	void vEB2();
 	int NBloque(T valor, int bloque);
 };
 
@@ -102,6 +103,61 @@ void AVLTree<T>::DFS(){
 }
 
 template <typename T>
+void AVLTree<T>::vEB2(){
+    int eti = 0;
+    stack<Node<T>* > pila;
+    pila.push(raiz);
+    pila.top()->etiqueta = ++eti;
+    Node<T> *tmp = pila.top();
+/*
+                pila.pop();
+                if(tmp->nodes[1])
+                    pila.push(tmp->nodes[1]);
+                if(tmp->nodes[0])
+                    pila.push(tmp->nodes[0]);
+
+*/
+
+    while(!pila.empty()){
+        if(pila.top()){
+                if(pila.top()->etiqueta == 0)
+                    pila.top()->etiqueta = ++eti;
+
+                if(pila.top()->nodes[0] && pila.top()->nodes[0]->etiqueta == 0){
+                    pila.top()->nodes[0]->etiqueta = ++eti;
+
+                    if(pila.top()->nodes[0]->nodes[0] && pila.top()->nodes[0]->nodes[0]->etiqueta == 0)
+                        pila.top()->nodes[0]->nodes[0]->etiqueta = ++eti;
+                    if(pila.top()->nodes[0]->nodes[1] && pila.top()->nodes[0]->nodes[1]->etiqueta == 0)
+                        pila.top()->nodes[0]->nodes[1]->etiqueta = ++eti;
+
+                }
+
+                if(pila.top()->nodes[1] && pila.top()->nodes[1]->etiqueta == 0){
+                    pila.top()->nodes[1]->etiqueta = ++eti;
+
+                    if(pila.top()->nodes[1]->nodes[0] && pila.top()->nodes[1]->nodes[0]->etiqueta == 0)
+                        pila.top()->nodes[1]->nodes[0]->etiqueta = ++eti;
+                    if(pila.top()->nodes[1]->nodes[1] && pila.top()->nodes[1]->nodes[1]->etiqueta == 0)
+                        pila.top()->nodes[1]->nodes[1]->etiqueta = ++eti;
+
+                }
+                tmp = pila.top();
+                pila.pop();
+                if(tmp->nodes[1])
+                    pila.push(tmp->nodes[1]);
+                if(tmp->nodes[0])
+                    pila.push(tmp->nodes[0]);
+
+        }
+        else{
+            pila.pop();
+        }
+    }
+    cout << endl;
+}
+
+template <typename T>
 void AVLTree<T>::BFS() { // AMPLITUD
     int eti = 0;
     queue<Node<T>* > cola;
@@ -134,7 +190,7 @@ void AVLTree<T>::printEtiquetados() { // AMPLITUD
 
 
 template <typename T>
-void AVLTree<T>::vEB() { // AMPLITUD
+void AVLTree<T>::vEB() {
     int eti = 0;
     queue<Node<T>* > cola;
     cola.push(raiz);
@@ -153,6 +209,7 @@ void AVLTree<T>::vEB() { // AMPLITUD
                 cola.front()->nodes[0]->nodes[0]->etiqueta = ++eti;
             if(cola.front()->nodes[0]->nodes[1] && cola.front()->nodes[0]->nodes[1]->etiqueta == 0)
                 cola.front()->nodes[0]->nodes[1]->etiqueta = ++eti;
+
         }cola.push(cola.front()->nodes[0]);
 
 
@@ -163,6 +220,7 @@ void AVLTree<T>::vEB() { // AMPLITUD
                 cola.front()->nodes[1]->nodes[0]->etiqueta = ++eti;
             if(cola.front()->nodes[1]->nodes[1] && cola.front()->nodes[1]->nodes[1]->etiqueta == 0)
                 cola.front()->nodes[1]->nodes[1]->etiqueta = ++eti;
+
         }cola.push(cola.front()->nodes[1]);
     }
     cola.pop();
@@ -496,11 +554,12 @@ int main() {
 
 
     arbol.vEB();
-    ///arbol.DFS();
-    ///arbol.BFS();
+    //arbol.vEB2();
+    //arbol.DFS();
+    //arbol.BFS();
     //arbol.printEtiquetados();
-    cout << arbol.NBloque(1, 3) <<endl;
-    cout << arbol.NBloque(6, 3) <<endl;
+    cout << arbol.NBloque(11, 3) <<endl;
+    cout << arbol.NBloque(5, 3) <<endl;
 
 
 	cout << endl << endl << endl << endl << endl << endl;
