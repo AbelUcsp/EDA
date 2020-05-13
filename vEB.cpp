@@ -65,9 +65,14 @@ public:
 	int NBloque(T valor, int bloque);
 };
 
+
+vector<Node<int> *> path;
+
 template <typename T>
-bool AVLTree<T>::Find(T x, Node<T> ** &p) {								  //for
-	for (p = &raiz; (*p) && (*p)->val != x; p = &( (*p)->nodes[ (*p)->val < x] )  );
+bool AVLTree<T>::Find(T x, Node<T> ** &p) {
+    path.reserve(124);
+    path.push_back(raiz); //for
+	for (p = &raiz; (*p) && (*p)->val != x; p = &( (*p)->nodes[ (*p)->val < x] ), path.push_back(*p) ); //; path.push(*p)
 	return (*p)!=nullptr;
 };
 
@@ -75,7 +80,22 @@ bool AVLTree<T>::Find(T x, Node<T> ** &p) {								  //for
 template <typename T>
 int AVLTree<T>::NBloque(T valor, int bloque){
     Node<T> **Ptr;
+    path.clear();   //[6, 4, 3, 1] => [1 , 1, 2 , 2] => 2
+    int tmp = 0;
+    int bvisitado = -1;
+
     if (Find(valor, Ptr)){
+
+        cout << "path\tbloque"<<endl;
+        for(auto i : path){
+            if(bvisitado != ceil(i->etiqueta/static_cast<float>(bloque))){
+                bvisitado = ceil(i->etiqueta/static_cast<float>(bloque));
+                tmp++;
+            }
+            cout << i->val <<"\t" << ceil(i->etiqueta/static_cast<float>(bloque)) <<endl;
+        }
+        cout << "bloques visitiados "<< tmp <<endl<<endl;
+
         return  ceil( (*Ptr)->etiqueta/static_cast<float>(bloque) );
     }
     return -1;
@@ -541,7 +561,7 @@ void AVLTree<T>::print2(queue<Node<T> *> cola, int n){
 int main() {
 
 	AVLTree<int> arbol;
-    for(int i=1; i<16; ++i)
+    for(int i=1; i<32; ++i)
         arbol.insert(i);
 
     queue<Node<int> *> cola;
@@ -552,14 +572,12 @@ int main() {
 
 
 
-
     arbol.vEB();
     //arbol.vEB2();
     //arbol.DFS();
     //arbol.BFS();
     //arbol.printEtiquetados();
-    cout << arbol.NBloque(11, 3) <<endl;
-    cout << arbol.NBloque(5, 3) <<endl;
+    cout << "N° Bloque " <<arbol.NBloque(5, 3) <<endl;
 
 
 	cout << endl << endl << endl << endl << endl << endl;
